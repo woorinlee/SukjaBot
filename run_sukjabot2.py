@@ -161,7 +161,7 @@ async def on_message(message):
     if message.content == "rsts" or message.content == "ㄱㄴㅅㄴ": # 봇 재부팅
         if message.author.id == sukjabot2_setting.rsj or message.author.id == sukjabot2_setting.sjb:
             await message.delete()
-            await bot.get_channel(int(logch)).send("숙자씨 OFF")
+            await bot.get_channel(int(sukjabot2_setting.logch)).send("숙자씨 OFF")
             sukjabot2_define.restart_bot()
     elif message.content == "off" or message.content == "OFF": # 봇 종료
         if message.author.id == sukjabot2_setting.rsj or message.author.id == sukjabot2_setting.sjb:
