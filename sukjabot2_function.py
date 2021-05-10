@@ -128,7 +128,7 @@ async def 학식(ctx, campus, when):
             embed.set_author(name="숙자봇 학식 알리미",icon_url=sjb_avatar_url)
             await ctx.send(embed=embed)
     elif campus == "드림":
-        d_url = "https://dormi.kongju.ac.kr/HOME/sub.php?code=041302&currentYear=2021&currentMonth=05&currentWeekNo=2&currentWeekStart=20210502&currentWeekEnd=20210508"
+        d_url = "https://dormi.kongju.ac.kr/HOME/sub.php?code=041302"
         d_webpage = requests.get(d_url)
         d_soup = BeautifulSoup(d_webpage.content, "html.parser")
         d_mdatelist = []
@@ -209,6 +209,88 @@ async def 학식(ctx, campus, when):
                 \nㅅ학식 드림 이번주 : 이번주 학식 정보 출력",inline=True)
             embed.set_author(name="숙자봇 학식 알리미",icon_url=sjb_avatar_url)
             await ctx.send(embed=embed)
+    elif campus == "은행사" or campus == "비전":
+        s_url = "https://dormi.kongju.ac.kr/HOME/sub.php?code=041301"
+        s_webpage = requests.get(s_url)
+        s_soup = BeautifulSoup(s_webpage.content, "html.parser")
+        s_mdatelist = []
+        s_mdowlist = []
+        s_mbmeallist = []
+        s_mlmeallist = []
+        s_mdmeallist = []
+        # 일자
+        for i in range(0, 7):
+            j = i + 1
+            s_mdate = s_soup.select_one('#food-info > div > table > tbody > tr:nth-child(' + str(j) + ') > td:nth-child(2)')
+            s_mdatelist.append(sukjabot2_define.get_domi_meal_date_text(s_mdate))
+        #요일
+        for i in range(0, 7):
+            j = i + 1
+            s_mdow = s_soup.select_one('#food-info > div > table > tbody > tr:nth-child(' + str(j) + ') > td.noedge-l.first > font')
+            s_mdowlist.append(sukjabot2_define.get_domi_meal_date_text(s_mdow))
+        #조식
+        for i in range(0, 7):
+            j = i + 1
+            s_mbmeal = s_soup.select_one('#food-info > div > table > tbody > tr:nth-child(' + str(j) + ') > td:nth-child(3)')
+            s_mbmeallist.append(sukjabot2_define.get_dream_domi_meal_text(s_mbmeal))
+        #중식
+        for i in range(0, 7):
+            j = i + 1
+            s_mlmeal = s_soup.select_one('#food-info > div > table > tbody > tr:nth-child(' + str(j) + ') > td:nth-child(4)')
+            s_mlmeallist.append(sukjabot2_define.get_dream_domi_meal_text(s_mlmeal))
+        #석식
+        for i in range(0, 7):
+            j = i + 1
+            s_mdmeal = s_soup.select_one('#food-info > div > table > tbody > tr:nth-child(' + str(j) + ') > td.noedge-r.last')
+            s_mdmeallist.append(sukjabot2_define.get_dream_domi_meal_text(s_mdmeal))
+
+        if when == "이번주":
+            embed=discord.Embed(title="신관캠퍼스 은행사/비전하우스 기숙사 조식", description=f"",timestamp=datetime.datetime.now(pytz.timezone('UTC')),color=0xFF9D5B)
+            for i in range(0, 7):
+                embed.add_field(name=s_mdatelist[i] + " (" + s_mdowlist[i] + ")",value=s_mbmeallist[i],inline=True)
+            embed.set_author(name="숙자봇 학식 알리미",icon_url=sjb_avatar_url)
+            await ctx.send(embed=embed)
+            embed=discord.Embed(title="신관캠퍼스 은행사/비전하우스 기숙사 중식", description=f"",timestamp=datetime.datetime.now(pytz.timezone('UTC')),color=0xFF9D5B)
+            for i in range(0, 7):
+                embed.add_field(name=s_mdatelist[i] + " (" + s_mdowlist[i] + ")",value=s_mlmeallist[i],inline=True)
+            embed.set_author(name="숙자봇 학식 알리미",icon_url=sjb_avatar_url)
+            await ctx.send(embed=embed)
+            embed=discord.Embed(title="신관캠퍼스 은행사/비전하우스 기숙사 석식", description=f"",timestamp=datetime.datetime.now(pytz.timezone('UTC')),color=0xFF9D5B)
+            for i in range(0, 7):
+                embed.add_field(name=s_mdatelist[i] + " (" + s_mdowlist[i] + ")",value=s_mdmeallist[i],inline=True)
+            embed.set_author(name="숙자봇 학식 알리미",icon_url=sjb_avatar_url)
+            await ctx.send(embed=embed)
+        elif when == "오늘":
+            embed=discord.Embed(title="신관캠퍼스 은행사/비전하우스 기숙사 오늘자 학식", description=f"",timestamp=datetime.datetime.now(pytz.timezone('UTC')),color=0xFF9D5B)
+            for i in range(0, 7):
+                if s_mdatelist[i] == today:
+                    embed.add_field(name=s_mdatelist[i] + " (" + s_mdowlist[i] + ")\n조식",value=s_mbmeallist[i],inline=True)
+                    embed.add_field(name="ㅤ\n중식",value=s_mlmeallist[i],inline=True)
+                    embed.add_field(name="ㅤ\n석식",value=s_mdmeallist[i],inline=True)
+            embed.set_author(name="숙자봇 학식 알리미",icon_url=sjb_avatar_url)
+            await ctx.send(embed=embed)
+        elif when == "내일":
+            embed=discord.Embed(title="신관캠퍼스 은행사/비전하우스 기숙사 내일자 학식", description=f"",timestamp=datetime.datetime.now(pytz.timezone('UTC')),color=0xFF9D5B)
+            try:
+                for i in range(0, 7):
+                    if s_mdatelist[i] == today:
+                        k = i + 1
+                        embed.add_field(name=s_mdatelist[k] + " (" + s_mdowlist[k] + ")\n조식",value=s_mbmeallist[k],inline=True)
+                        embed.add_field(name="ㅤ\n중식",value=s_mlmeallist[k],inline=True)
+                        embed.add_field(name="ㅤ\n석식",value=s_mdmeallist[k],inline=True)
+                embed.set_author(name="숙자봇 학식 알리미",icon_url=sjb_avatar_url)
+                await ctx.send(embed=embed)
+            except IndexError:
+                embed=discord.Embed(title="", description=f"",timestamp=datetime.datetime.now(pytz.timezone('UTC')),color=0xFF9D5B)
+                embed.add_field(name="학식 알리미 도움말", value="내일자 학식 정보가 없습니다.\n정보 업데이트를 기다려 주세요.",inline=True)
+                embed.set_author(name="숙자봇 학식 알리미",icon_url=sjb_avatar_url)
+                await ctx.send(embed=embed)
+        else:
+            embed=discord.Embed(title="", description=f"",timestamp=datetime.datetime.now(pytz.timezone('UTC')),color=0xFF9D5B)
+            embed.add_field(name="학식 알리미 도움말", value="ㅅ학식 은행사 오늘 (or ㅅ학식 비전 오늘) : 오늘자 학식 정보 출력\
+                \nㅅ학식 은행사 내일 (or ㅅ학식 비전 내일) : 내일자 학식 정보 출력\nㅅ학식 은행사 이번주 (or ㅅ학식 비전 이번주) : 이번주 학식 정보 출력",inline=True)
+            embed.set_author(name="숙자봇 학식 알리미",icon_url=sjb_avatar_url)
+            await ctx.send(embed=embed)
     elif campus == "천안":
         c_url = "https://dormi.kongju.ac.kr/sub.php?code=041303"
         c_webpage = requests.get(c_url)
@@ -277,6 +359,13 @@ async def 학식(ctx, campus, when):
                 \nㅅ학식 천안 이번주 : 이번주 학식 정보 출력",inline=True)
             embed.set_author(name="숙자봇 학식 알리미",icon_url=sjb_avatar_url)
             await ctx.send(embed=embed)
+    else:
+        embed=discord.Embed(title="", description=f"",timestamp=datetime.datetime.now(pytz.timezone('UTC')),color=0xFF9D5B)
+        embed.add_field(name="학식 알리미 도움말", value="ㅅ학식 천안 오늘/내일/이번주 : 천안캠퍼스 챌린지하우스 학식 정보 출력\
+            \nㅅ학식 드림 오늘/내일/이번주 : 신관캠퍼스 드림하우스 학식 정보 출력\nㅅ학식 은행사/비전 오늘/내일/이번주 : 신관캠퍼스 은행사/비전하우스 학식 정보 출력\
+            \nㅅ학식 예산 오늘/내일/이번주 : 예산캠퍼스 금오사/예지사 학식 정보 출력",inline=True)
+        embed.set_author(name="숙자봇 학식 알리미",icon_url=sjb_avatar_url)
+        await ctx.send(embed=embed)
 
 
 # 유저 관련 기능
