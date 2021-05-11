@@ -521,7 +521,7 @@ async def 태봄(ctx):
 
 @bot.command(pass_context=True)
 async def 겨울(ctx):
-    rannum = random.randrange(1, 14)
+    rannum = random.randrange(1, 16)
     await ctx.send(file=discord.File("C:/Users/lenya/Documents/DiscordBot/pics/Gyuerul/gu (" + str(rannum) + ").jpg"))
 
 @bot.command(pass_context=True)
