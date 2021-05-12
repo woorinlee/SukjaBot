@@ -501,7 +501,7 @@ async def 핑(ctx):
 # 사진 출력
 @bot.command(pass_context=True)
 async def 산도(ctx):
-    rannum = random.randrange(1, 64)
+    rannum = random.randrange(1, 72)
     await ctx.send(file=discord.File("C:/Users/lenya/Documents/DiscordBot/pics/Sando/sd (" + str(rannum) + ").jpg"))
 
 @bot.command(pass_context=True)
