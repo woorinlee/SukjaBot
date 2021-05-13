@@ -111,13 +111,24 @@ async def on_message_edit(before, after): # 유저 메세지 수정 시
     else:
         print("[ " + str(message_time) + " ] (기타서버) 수정된 메세지 - [" + str(before.author) + "] : "+ before.content + " → " + after.content)
 
-'''@bot.event
+@bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, discord.ext.commands.errors.CommandNotFound):
-        return
-    else:
-        await ctx.send(embed=discord.Embed(title="에러 발생", description = str(sukjabot2_define.get_full_class_name(error)) + " : " + str(error), color = 0xF14952))
-        print("[ " + str(message_time) + " ] " + str(sukjabot2_define.get_full_class_name(error) + " : " + str(error)))'''
+        if error == "Command \"ㅈㅂ\" is not found":
+            return
+        else:
+            embed=discord.Embed(title= f"", description=f"",timestamp=datetime.datetime.now(pytz.timezone('UTC')),color=0xe91e63)
+            embed.add_field(name=f"ㅅ가져와 '유저 태그'",value=f"유저 프로필사진 가져오기",inline=False)
+            embed.add_field(name=f"ㅅ국어사전 '검색할 단어'",value=f"국어사전 검색 진행 (네이버)",inline=False)
+            embed.add_field(name=f"ㅅ영어사전 '검색할 단어'",value=f"영어사전 검색 진행 (네이버)",inline=False)
+            embed.add_field(name=f"ㅅ누구",value=f"누가 언제 자신을 태그했는지 확인 가능 (없으면 None 표시)",inline=False)
+            embed.add_field(name=f"번역 '번역 전 언어' '번역할 언어' '번역할 내용'",value=f"한국어, 일본어, 영어 번역 진행 중 (예: ㅅ번역 한 일 안녕하세요)",inline=False)
+            embed.add_field(name=f"ㅅ코로나",value=f"코로나 확진자 수 출력",inline=False)
+            embed.add_field(name=f"ㅅ학식 (캠퍼스) (언제)", value=f"기숙사 식단 정보 출력",inline=False)
+            embed.add_field(name=f"ㅅ티아 ㅅ산도 ㅅ태봄 ㅅ콩이 ㅅ겨울 ㅅ쮸",value=f"아무튼 귀여우니까 입력해볼 것",inline=False)
+            embed.set_author(name="숙자봇 사용설명서",icon_url=sukjabot2_setting.sjb_avatar_url)
+            embed.set_footer(text="문의사항은 @890-KN#2825")
+            await ctx.send(embed=embed)
 
 @bot.event
 async def on_message(message):

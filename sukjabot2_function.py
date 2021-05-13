@@ -454,6 +454,7 @@ async def 도움(ctx):
     embed.add_field(name=f"ㅅ누구",value=f"누가 언제 자신을 태그했는지 확인 가능 (없으면 None 표시)",inline=False)
     embed.add_field(name=f"번역 '번역 전 언어' '번역할 언어' '번역할 내용'",value=f"한국어, 일본어, 영어 번역 진행 중 (예: ㅅ번역 한 일 안녕하세요)",inline=False)
     embed.add_field(name=f"ㅅ코로나",value=f"코로나 확진자 수 출력",inline=False)
+    embed.add_field(name=f"ㅅ학식 (캠퍼스) (언제)", value=f"기숙사 식단 정보 출력",inline=False)
     embed.add_field(name=f"ㅅ티아 ㅅ산도 ㅅ태봄 ㅅ콩이 ㅅ겨울 ㅅ쮸",value=f"아무튼 귀여우니까 입력해볼 것",inline=False)
     embed.set_author(name="숙자봇 사용설명서",icon_url=sjb_avatar_url)
     embed.set_footer(text="문의사항은 @890-KN#2825")
@@ -489,7 +490,10 @@ async def 낚시(ctx):
             time.sleep(2.5)
         fail_embed=discord.Embed(title= f"낚시 실패", description=fail_message[random.randint(0,2)],color=0x979C9F)
         await fishing_msg.edit(embed=fail_embed)
-        
+
+@bot.command(pass_context=True, name="ㅈㅂ")
+async def testmain(ctx):
+    return
 
 @bot.command()
 async def 핑(ctx):
