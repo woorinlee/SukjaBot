@@ -1,6 +1,7 @@
 import sukjabot2_setting, sukjabot2_define
 import discord, datetime, pytz, requests, re, random, time
 
+from discord.utils import get
 from openpyxl import load_workbook, Workbook
 from openpyxl.styles import Alignment, PatternFill, Color
 from bs4 import BeautifulSoup
@@ -473,6 +474,48 @@ async def 비상(ctx, num1):
 
 
 # 봇 테스트용
+@bot.command(pass_context=True)
+async def 밀어테스트(ctx):
+    if ctx.author.id == sukjabot2_setting.rsj:
+        await ctx.channel.purge(limit = int(1000))
+
+@bot.command(pass_context=True)
+async def 밀어(ctx):
+    mem_num = 3
+    del_embed=discord.Embed(title="", description=f"```cs\n채팅창 밀기를 원하면 ⭕\n아니면 ❌를 눌러주세요.```",color=0xF14952)
+    del_embed.set_author(name="채팅창 밀기 투표",icon_url=sukjabot2_setting.sjb_avatar_url)
+    del_msg = await ctx.send(embed=del_embed)
+    await del_msg.add_reaction("⭕")
+    await del_msg.add_reaction("❌")
+    for i in range(1, 30):
+        time_num = 30 - i
+        del_wait_embed = discord.Embed(title="", description=f"```cs\n채팅창 밀기를 원하면 ⭕\n아니면 ❌를 눌러주세요.\n남은 시간 : "  + str(time_num) + "\n투표에 필요한 인원 수 : 3명```",color=0xF14952)
+        # "\n투표에 필요한 인원 수 : " + str(mem_num) + 
+        del_wait_embed.set_author(name="채팅창 밀기 투표",icon_url=sukjabot2_setting.sjb_avatar_url)
+        await del_msg.edit(embed=del_wait_embed)
+        del_get_message = await ctx.channel.fetch_message(del_msg.id)
+        ok_reaction = get(del_get_message.reactions, emoji="⭕")
+        can_reaction = get(del_get_message.reactions, emoji="❌")
+        print("O : " + str(ok_reaction.count) + " / X : " + str(can_reaction.count))
+        if ok_reaction.count > 3:
+            await ctx.channel.purge(limit = int(1000))
+            del_com_embed = discord.Embed(title="", description=f"```cs\n삭제 완료```",color=0xF14952)
+            del_com_embed.set_author(name="채팅창 밀기 투표",icon_url=sukjabot2_setting.sjb_avatar_url)
+            await ctx.send(embed=del_com_embed)
+            return
+        elif can_reaction.count > 3:
+            del_not_embed = discord.Embed(title="", description=f"```cs\n삭제 취소```",color=0xF14952)
+            del_not_embed.set_author(name="채팅창 밀기 투표",icon_url=sukjabot2_setting.sjb_avatar_url)
+            await del_msg.edit(embed=del_not_embed)
+            #can_msg = await ctx.send(embed=del_not_embed)
+            await del_msg.clear_reactions()
+            return
+        time.sleep(1)
+    del_end_embed = discord.Embed(title="", description=f"```cs\n시간 만료```",color=0xF14952)
+    del_end_embed.set_author(name="채팅창 밀기 투표",icon_url=sukjabot2_setting.sjb_avatar_url)
+    await del_msg.edit(embed=del_end_embed)
+    await del_msg.clear_reactions()
+
 @bot.command(pass_context=True)
 async def 낚시(ctx):
     if ctx.author.id == sukjabot2_setting.rsj:
