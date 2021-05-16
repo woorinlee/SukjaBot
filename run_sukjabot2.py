@@ -180,7 +180,8 @@ async def on_message(message):
             await bot.get_channel(int(sukjabot2_setting.logch)).send("숙자씨 OFF")
             await bot.close()
     elif message.content.startswith("ㅅㅈㅂ") or message.content.startswith("숙자봇"):
-        await message.channel.send("네엡")
+        if message.author.id == sukjabot2_setting.rsj or message.author.id == sukjabot2_setting.sjb:
+            await message.channel.send("네엡")
     elif message.content.startswith("번역"): # 번역
         transwanttext = message.content.split(" ")
         lan_check = sukjabot2_define.lan_check
@@ -343,6 +344,13 @@ async def on_message(message):
         embed=discord.Embed(title="", description=f"",timestamp=datetime.datetime.now(pytz.timezone('UTC')),color=0xF14952)
         embed.add_field(name="절대 안옵니다!",value='전역까지 {}년 {}일 {}시간 {}분 {}초 남았습니다.'.format(mh_years, mh_days, mh_hours, mh_minutes, mh_seconds),inline=False)
         embed.set_author(name="깜찍공주만을 위한 타이머",icon_url=sukjabot2_setting.sjb_avatar_url)
+        await message.channel.send(embed=embed)
+    elif message.content == "종강":
+        end_hell = datetime.datetime(2021, 6, 16, 18)
+        eh_years, eh_days, eh_hours, eh_minutes, eh_seconds = sukjabot2_define.remaining_time(end_hell, message_time)
+        embed=discord.Embed(title="", description=f"",timestamp=datetime.datetime.now(pytz.timezone('UTC')),color=0xF14952)
+        embed.add_field(name="종강까지",value='{}년 {}일 {}시간 {}분 {}초 남았습니다.'.format(eh_years, eh_days, eh_hours, eh_minutes, eh_seconds),inline=False)
+        embed.set_author(name="모두를 위한 종강 타이머",icon_url=sukjabot2_setting.sjb_avatar_url)
         await message.channel.send(embed=embed)
     elif "시발" in message.content:
         await message.delete()
